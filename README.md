@@ -1,8 +1,36 @@
+A Caching Network Simulator
+===========================
+
+Simulator of experiments presented in "Adaptive Caching Networks with Optimality Guarantees", S. Ioannidis and E. Yeh, ACM SIGMETRICS, 2016. Please cite this paper if you intend to use this code for your research.
+
+Usage
+-----
+An example execution is as follows:
+
+	python CacheNetwork.py outputfile --graph_type balanced_tree --graph_degree 2 --cache_type LRU --graph_size 60 --min_capacity 3 --max_capacity 3 --query_nodes 20 --catalog_size 300 --demand_size 1000 --max_weight 100 --time 5000
 
 
-Simulator of experiments presented in "Adaptive Caching Networks with Optimality Guarantees", S. Ioannidis and E. Yeh, SIGMETRICS 2016. Please cite this paper if you intend to use this code for your research.
+This simulate an experiment over a balanced_tree topology, where each node has 2 children, using path replication with LRU caches. The graph size contains 60 nodes of capacity 3 (excluding capacity for designated source content), storing items from a catalog of 30 items. Only 20 of these nodes generate queries. There are 1000 types of requests (items and paths followed). The maximum weight of an edge is 1000, and the simulation runs for 5000 time units.
+
+ 
+
+Simulator Overview
+------------------
 
 
+A cache network comprises a weighted graph and a list of demands. Each node in the graph is associated with a cache of finite capacity.
+NetworkCaches must support a message receive operation, that determines how they handle incoming messages.
+
+The cache network handles messaging using `simpy` stores and processes. In partiqular, each cache, edge and demand is associated with a 
+Store object, that receives, stores, and processes messages from simpy processes.
+
+In more detail:
+- Each demand is associated with two processes, one that generates new queries, and one that monitors and logs completed queries (existing only for logging purposes)
+- Each cache/node is associated with a process that receives messages, and processes them, and produces new messages to be routed, e.g., towards neigboring edges
+- Each edge is associated with a process that receives messages to be routed over the edge, and delivers them to the appropriate target node.
+During "delivery", messages are (a) delayed, according to configuration parameters, and (b) statistics about them are logged (e.g., number of hops, etc.)
+     
+Finally, a global monitoring process computes the social welfare at poisson time intervals.
 
 
 
@@ -89,3 +117,10 @@ Several program parameters can be controlled from the command line.
 		  --gamma GAMMA         gamma used in LMIN (default: 0.1)
 		  --expon EXPON         exponent used in LMIN (default: 0.5)
 		  --T T                 Suffling period used in LMIN (default: 5.0)
+
+
+Using `pydoc`
+------------
+
+Type `pydoc CacheNetwork` to see documentation for the `CacheNetwork` class; same applies to other `.py` files.
+
