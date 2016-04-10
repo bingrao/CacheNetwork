@@ -25,9 +25,9 @@ The cache network handles messaging using `simpy` stores and processes. In parti
 Store object, that receives, stores, and processes messages from simpy processes.
 
 In more detail:
-- Each demand is associated with two processes, one that generates new queries, and one that monitors and logs completed queries (existing only for logging purposes)
-- Each cache/node is associated with a process that receives messages, and processes them, and produces new messages to be routed, e.g., towards neigboring edges
-- Each edge is associated with a process that receives messages to be routed over the edge, and delivers them to the appropriate target node.
+* Each demand is associated with two processes, one that generates new queries, and one that monitors and logs completed queries (existing only for logging purposes)
+* Each cache/node is associated with a process that receives messages, and processes them, and produces new messages to be routed, e.g., towards neigboring edges
+* Each edge is associated with a process that receives messages to be routed over the edge, and delivers them to the appropriate target node.
 During "delivery", messages are (a) delayed, according to configuration parameters, and (b) statistics about them are logged (e.g., number of hops, etc.)
      
 Finally, a global monitoring process computes the social welfare at poisson time intervals.
