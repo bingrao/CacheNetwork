@@ -15,7 +15,7 @@ threshold = 1000.0
 
 matplotlib.rcParams['ps.useafm'] = True
 matplotlib.rcParams['pdf.use14corefonts'] = True
-#matplotlib.rcParams['text.usetex'] = True
+matplotlib.rcParams['text.usetex'] = True
 
 colors =['b', 'g', 'r', 'c' ,'m' ,'y' ,'k' ,'w']
 
@@ -93,7 +93,7 @@ if __name__=='__main__':
     	ax.set_ylabel('Gain')
     	ax.set_xlabel('Time')
     	plt.legend([optline,ecline,taline],names)
-    	ax.set_title(graph+' '+cache )
+    	ax.set_title(graph.replace('_','-')+' '+cache )
     	fig.savefig(_id+'.pdf',bbox_inches='tight')
     	plt.close(fig)
 
@@ -130,7 +130,7 @@ if __name__=='__main__':
         newind += width 
 	i += 1
     ax.set_xticks(ind-width*len(caches)/2 )
-    ax.set_xticklabels(graphs)
+    ax.set_xticklabels([g.replace("_","-") for g in  graphs])
     ax.grid(False)
     if myargs.hatch:
 	hatchstring = "_withhatch"
