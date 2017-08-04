@@ -16,7 +16,6 @@ from numpy.linalg import matrix_rank
 import logging,argparse
 import itertools
 from statsmodels.distributions.empirical_distribution import ECDF
-import matplotlib.pyplot as plt
 import pickle
 import topologies
 
@@ -154,13 +153,17 @@ class CacheNetwork(DiGraph):
    
    """
 
-   def __init__(self,G,cacheGenerator,demands,item_sources,capacities,weights,delays,warmup = 0,monitoring_rate=1.0):
+   def __init__(self,G,cacheGenerator,demands,item_sources,capacities,weights,delays,warmup = 0,monitoring_rate=1.0,demand_change_rate=0,demand_min=1.0,demand_max=1.0):
 	self.env = Environment()   
 	self.warmup =warmup
 	self.demandstats = {}
 	self.sw ={}
 	self.funstats ={}
+	self.optstats = {}
 	self.monitoring_rate=monitoring_rate
+	self.demand_change_rate = demand_change_rate
+        self.demand_min = demand_min
+        self.demand_max = demand_max
 
 	DiGraph.__init__(self,G)
 	for x in self.nodes():
@@ -193,6 +196,11 @@ class CacheNetwork(DiGraph):
 	for d in self.demands:
 	   self.env.process(self.spawn_queries_process(d))
 	   self.env.process(self.demand_monitor_process(d))
+	   if self.demand_change_rate>0.0:
+               self.env.process(self.demand_change_process(d))
+
+        if self.demand_change_rate>0.0:
+               self.env.process(self.compute_opt_process())
 
 	for e in self.edges():
 	   self.env.process(self.message_pusher_process(e))
@@ -223,6 +231,7 @@ class CacheNetwork(DiGraph):
 	  self.demands[d]['queries_spawned'] += 1
 	  yield self.node[d.query_source]['pipe'].put((qm,(d,d.query_source))) 	
           yield self.env.timeout(random.expovariate(d.rate))
+
 
    def demand_monitor_process(self,d):
         """ A process monitoring statistics about completed requests.
@@ -262,6 +271,35 @@ class CacheNetwork(DiGraph):
 		    else:
 			self.demands[d]['stats'][key] = stats[key]
 
+   def demand_change_process(self,d):
+        """ A process changing the demand periodically 
+        """
+        while True:
+	  yield self.env.timeout(1./self.demand_change_rate)
+          new_rate = random.uniform(self.demand_min,self.demand_max)
+          logging.info(pp([self.env.now,':Demand for ',d.item,'following',d.path,'changing rate from',d.rate,'to',new_rate]))
+	  d.rate = new_rate
+
+   def compute_opt_process(self):
+	  ''' Process recomputing optimal values after demand changes. Used only if demand changes periodically
+          '''
+	  yield self.env.timeout(0.01*1./self.demand_change_rate) #Tiny offset, to make sure all demands have been updated by measurement time
+	  
+          while True:
+              Y,res= self.minimizeRelaxation()
+              logging.info(pp([self.env.now,': Optimal Relaxation is: ',self.relaxation(Y)]))
+              logging.info(pp([self.env.now,': Expected caching gain at relaxation point is: ',self.expected_caching_gain(Y)]))
+              optimal_stats= {}
+              optimal_stats['res']= res
+              optimal_stats['Y'] = Y
+              optimal_stats['L'] = self.relaxation(Y)
+              optimal_stats['F']  = self.expected_caching_gain(Y)
+	      self.optstats[self.env.now] = optimal_stats
+	      yield self.env.timeout(1./self.demand_change_rate)
+
+
+
+        
 		
    def message_pusher_process(self,e):
         """ A process handling message transmissions over edges.
@@ -1093,6 +1131,7 @@ def main():
    parser.add_argument('--catalog_size',default=100,type=int, help='Catalog size')
 #   parser.add_argument('--sources_per_item',default=1,type=int, help='Number of designated sources per catalog item')
    parser.add_argument('--demand_size',default=1000,type=int, help='Demand size')
+   parser.add_argument('--demand_change_rate',default=0.0,type=float, help='Demand change rate')
    parser.add_argument('--demand_distribution',default="powerlaw",type=str, help='Demand distribution',choices=['powerlaw','uniform'])
    parser.add_argument('--powerlaw_exp',default=1.2,type=float, help='Power law exponent, used in demand distribution')
    parser.add_argument('--query_nodes',default=100,type=int, help='Number of nodes generating queries')
@@ -1267,7 +1306,7 @@ def main():
 
  
    logging.info('Building CacheNetwork')
-   cnx= CacheNetwork(G,cacheGenerator,demands,item_sources,capacities,weights,weights,args.warmup,args.monitoring_rate)
+   cnx= CacheNetwork(G,cacheGenerator,demands,item_sources,capacities,weights,weights,args.warmup,args.monitoring_rate,args.demand_change_rate,args.min_rate, args.max_rate)
    logging.info('...done')
 
    Y,res= cnx.minimizeRelaxation()
@@ -1301,6 +1340,7 @@ def main():
 
    network_stats['demand'] = cnx.demandstats
    network_stats['fun'] = cnx.funstats
+   network_stats['opt'] = cnx.optstats
 
    out = args.outputfile+"%s_%s_%ditems_%dnodes_%dquerynodes_%ddemands_%ftime" % (args.graph_type,args.cache_type,args.catalog_size,args.graph_size,args.query_nodes,args.demand_size,args.time)  
  
