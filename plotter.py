@@ -92,6 +92,7 @@ if __name__=='__main__':
     	taline, =ax.plot(times2,tags,forms[2])
     	ax.set_ylabel('Gain')
     	ax.set_xlabel('Time')
+	ax.set_ylim(0,100)
     	plt.legend([optline,ecline,taline],names)
     	ax.set_title(graph.replace('_','-')+' '+cache )
     	fig.savefig(_id+'.pdf',bbox_inches='tight')

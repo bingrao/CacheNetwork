@@ -254,8 +254,8 @@ class LMinimalCache(Cache):
 
 	#cleanup, make kosher
 	#print "Cleaning up",
-	self._state = dict( [(x,min(self._state[x],1.0)) for x in self._state if self._state[x]>1.e-6])
-	
+	self._state = dict( [(x,min(self._state[x],1.0)) for x in self._state if self._state[x]>1.e-18])
+        
         #print "After cleanup:",self._state
 	
         
