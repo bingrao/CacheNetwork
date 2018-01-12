@@ -1,7 +1,7 @@
 A Caching Network Simulator
 ===========================
 
-Simulator of experiments presented in "Adaptive Caching Networks with Optimality Guarantees", S. Ioannidis and E. Yeh, ACM SIGMETRICS, 2016. Please cite this paper if you intend to use this code for your research.
+Simulator of experiments presented in "Adaptive Caching Networks with Optimality Guarantees", S. Ioannidis and E. Yeh, ACM Transactions of Networking, 2018. Please cite this paper if you intend to use this code for your research.
 
 Usage
 -----
@@ -45,6 +45,7 @@ Several program parameters can be controlled from the command line.
 				       [--min_rate MIN_RATE] [--time TIME] [--warmup WARMUP]
 				       [--catalog_size CATALOG_SIZE]
 				       [--demand_size DEMAND_SIZE]
+				       [--demand_change_rate DEMAND_CHANGE_RATE]
 				       [--demand_distribution {powerlaw,uniform}]
 				       [--powerlaw_exp POWERLAW_EXP]
 				       [--query_nodes QUERY_NODES]
@@ -83,6 +84,9 @@ Several program parameters can be controlled from the command line.
 					Catalog size (default: 100)
 		  --demand_size DEMAND_SIZE
 					Demand size (default: 1000)
+
+		  --demand_change_rate DEMAND_CHANGE_RATE
+		                        Demand change rate (default: 0.0)
 		  --demand_distribution {powerlaw,uniform}
 					Demand distribution (default: powerlaw)
 		  --powerlaw_exp POWERLAW_EXP
