@@ -1342,7 +1342,7 @@ def main():
    network_stats['fun'] = cnx.funstats
    network_stats['opt'] = cnx.optstats
 
-   out = args.outputfile+"%s_%s_%ditems_%dnodes_%dquerynodes_%ddemands_%ftime_%fchange_%fgamma_%fexpon%" % (args.graph_type,args.cache_type,args.catalog_size,args.graph_size,args.query_nodes,args.demand_size,args.time,args.demand_change_rate,args.gamma,args.expon)  
+   out = args.outputfile+"%s_%s_%ditems_%dnodes_%dquerynodes_%ddemands_%ftime_%fchange_%fgamma_%fexpon%fbeta" % (args.graph_type,args.cache_type,args.catalog_size,args.graph_size,args.query_nodes,args.demand_size,args.time,args.demand_change_rate,args.gamma,args.expon,args.beta)  
  
    with  open(out,'wb') as f:
    	pickle.dump([args,construct_stats,optimal_stats,demand_stats,node_stats,network_stats],f)
