@@ -1,7 +1,7 @@
 A Caching Network Simulator
 ===========================
 
-Simulator of experiments presented in "Adaptive Caching Networks with Optimality Guarantees", S. Ioannidis and E. Yeh, ACM Transactions of Networking, 2018. Please cite this paper if you intend to use this code for your research.
+Simulator of experiments presented in ["Adaptive Caching Networks with Optimality Guarantees"](http://http://www.ece.neu.edu/fac-ece/pubs.html), S. Ioannidis and E. Yeh, IEEE/ACM Transactions of Networking, 2018. Please cite this paper if you intend to use this code for your research.
 
 Usage
 -----
