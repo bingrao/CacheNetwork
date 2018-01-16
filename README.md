@@ -10,7 +10,7 @@ An example execution is as follows:
 	python CacheNetwork.py outputfile --graph_type balanced_tree --graph_degree 2 --cache_type LRU --graph_size 60 --min_capacity 3 --max_capacity 3 --query_nodes 20 --catalog_size 300 --demand_size 1000 --max_weight 100 --time 5000
 
 
-This simulate an experiment over a balanced_tree topology, where each node has 2 children, using path replication with LRU caches. The graph size contains 60 nodes of capacity 3 (excluding capacity for designated source content), storing items from a catalog of 30 items. Only 20 of these nodes generate queries. There are 1000 types of requests (items and paths followed). The maximum weight of an edge is 1000, and the simulation runs for 5000 time units.
+This simulates an experiment over a balanced_tree topology, where each node has 2 children, using path replication with LRU caches. The graph size contains 60 nodes of capacity 3 (excluding capacity for designated source content), storing items from a catalog of 30 items. Only 20 of these nodes generate queries. There are 1000 types of requests (items and paths followed). The maximum weight of an edge is 1000, and the simulation runs for 5000 time units.
 
 More execution examples can be found in file `execution_examples` 
 
