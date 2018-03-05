@@ -128,3 +128,21 @@ Using `pydoc`
 
 Type `pydoc CacheNetwork` to see documentation for the `CacheNetwork` class; same applies to other `.py` files.
 
+Citing This Work
+----------------
+If you intend to use our code in your research, please cite our paper as follows:
+
+```bibtex
+     @article{ioannidis2018adaptive,
+     author = {Ioannidis, Stratis and Yeh, Edmund},
+     journal={IEEE/ACM Transactions on Networking}, 
+     title={Adaptive Caching Networks With Optimality Guarantees}, 
+     year={2018}, 
+     volume={PP}, 
+     number={99}, 
+     pages={1-14}, 
+     keywords={Algorithm design and analysis;Approximation algorithms;Heuristic algorithms;Probabilistic logic;Resource management;Routing;Topology;CCN;Caching;ICN;distributed optimization.;pipage rounding}, 
+     doi={10.1109/TNET.2018.2793581}, 
+     ISSN={1063-6692},
+     }
+```
