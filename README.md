@@ -143,6 +143,6 @@ If you intend to use our code in your research, please cite our paper as follows
      pages={1-14}, 
      keywords={Algorithm design and analysis;Approximation algorithms;Heuristic algorithms;Probabilistic logic;Resource management;Routing;Topology;CCN;Caching;ICN;distributed optimization.;pipage rounding}, 
      doi={10.1109/TNET.2018.2793581}, 
-     ISSN={1063-6692},
+     ISSN={1063-6692}
      }
 ```
