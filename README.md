@@ -14,6 +14,11 @@ This simulates an experiment over a balanced_tree topology, where each node has 
 
 More execution examples can be found in file `execution_examples`. 
 
+Dependencies
+------------
+Please use `networkx` version 1.11. The code is not compatible with later versions.
+
+
 Simulator Overview
 ------------------
 
